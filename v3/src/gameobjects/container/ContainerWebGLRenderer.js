@@ -1,11 +1,7 @@
 
-var ContainerWebGLRenderer = function (renderer, src, interpolationPercentage)
+var ContainerWebGLRenderer = function (renderer, src, interpolationPercentage, camera)
 {
-    var alpha = src.color.worldAlpha * 255 << 24;
-
-    //  Skip rendering?
-
-    if (src.skipRender || !src.visible || alpha === 0 || src.children.list.length === 0)
+    if (this.renderMask !== this.renderFlags)
     {
         return;
     }
@@ -15,7 +11,7 @@ var ContainerWebGLRenderer = function (renderer, src, interpolationPercentage)
     {
         var child = src.children.list[i];
 
-        child.render(renderer, child);
+        child.renderWebGL(renderer, child, interpolationPercentage, camera);
     }
 };
 

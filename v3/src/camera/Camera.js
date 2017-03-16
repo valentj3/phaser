@@ -32,6 +32,9 @@ var Camera = function (x, y, width, height)
     this._flashGreen = 1.0;
     this._flashBlue = 1.0;
     this._flashAlpha = 0.0;
+
+    // origin
+    this._follow = null;
 };
 
 Camera.prototype.constructor = Camera;
@@ -96,6 +99,22 @@ Camera.prototype = {
                 this._shakeOffsetY = (Math.random() * intensity * this.height * 2 - intensity * this.height) * this.zoom;
             }
         }
+    },
+
+    startFollow: function (gameObjectOrPoint)
+    {
+        if (this._follow !== null)
+        {
+            this.stopFollow();
+        }
+
+        this._follow = gameObjectOrPoint;
+    },
+
+    stopFollow: function () 
+    {
+        /* do unfollow work here */
+        this._follow = null;
     },
 
     flash: function (duration, red, green, blue, force)
@@ -163,13 +182,29 @@ Camera.prototype = {
 
     preRender: function ()
     {
+        var width = this.width;
+        var height = this.height;
         var zoom = this.zoom;
+        var matrix = this.matrix;
+        var originX = width / 2;
+        var originY = height / 2;
+        var follow = this._follow;
 
-        this.matrix.applyITRS(
-            this.x + this._shakeOffsetX, this.y + this._shakeOffsetY,
-            this.rotation,
-            zoom, zoom
-        );
+        if (follow != null)
+        {
+            originX = follow.x;
+            originY = follow.y;
+            
+            this.scrollX = originX - width * 0.5;
+            this.scrollY = originY - height * 0.5;
+        }
+
+        matrix.loadIdentity();
+        matrix.translate(this.x + originX, this.y + originY);
+        matrix.rotate(this.rotation);
+        matrix.scale(zoom, zoom);
+        matrix.translate(-originX, -originY);
+        matrix.translate(this._shakeOffsetX, this._shakeOffsetY);
     },
 
     destroy: function ()

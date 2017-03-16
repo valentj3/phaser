@@ -7,12 +7,14 @@ var ImageRender = require('./ImageRender');
 var Image = new Class({
 
     Mixins: [
-        Components.Transform,
-        Components.Texture,
-        Components.Size,
         Components.Alpha,
         Components.BlendMode,
+        Components.GetBounds,
+        Components.Origin,
         Components.ScaleMode,
+        Components.Size,
+        Components.Texture,
+        Components.Transform,
         Components.Visible,
         ImageRender
     ],
@@ -23,8 +25,10 @@ var Image = new Class({
     {
         GameObject.call(this, state);
 
-        this.setPosition(x, y);
         this.setTexture(texture, frame);
+        this.setPosition(x, y);
+        this.setSizeToFrame();
+        this.setOrigin();
     }
 
 });

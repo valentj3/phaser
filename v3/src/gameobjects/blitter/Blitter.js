@@ -26,12 +26,12 @@ var Bob = require('./Bob');
 var Blitter = new Class({
 
     Mixins: [
-        Components.Transform,
-        Components.Texture,
-        Components.Size,
         Components.Alpha,
         Components.BlendMode,
         Components.ScaleMode,
+        Components.Size,
+        Components.Texture,
+        Components.Transform,
         Components.Visible,
         BlitterRender
     ],
@@ -42,8 +42,8 @@ var Blitter = new Class({
     {
         GameObject.call(this, state);
 
-        this.setPosition(x, y);
         this.setTexture(texture, frame);
+        this.setPosition(x, y);
 
         this.children = new Components.Children(this);
 
@@ -136,56 +136,5 @@ var Blitter = new Class({
     }
 
 });
-
-module.exports = Blitter;
-
-
-
-
-
-
-// var CONST = require('../../const');
-// var GameObject = require('../GameObject');
-// var Children = require('../../components/Children');
-
-/**
-* A Blitter Game Object.
-*
-* The Blitter Game Object is a special type of Container, that contains Blitter.Bob objects.
-* These objects can be thought of as just texture frames with a position and nothing more.
-* Bobs don't have any update methods, or the ability to have children, or any kind of special effects.
-* They are essentially just super-fast texture frame renderers, and the Blitter object creates and manages them.
-*
-* @class Blitter
-* @extends Phaser.GameObject
-* @constructor
-* @param {Phaser.Game} game - A reference to the currently running game.
-* @param {number} [x=0] - The x coordinate of the Image. The coordinate is relative to any parent container this Image may be in.
-* @param {number} [y=0] - The y coordinate of the Image. The coordinate is relative to any parent container this Image may be in.
-* @param {string} [key] - The texture used by the Image during rendering. It can be a string which is a reference to the Cache entry, or an instance of a RenderTexture, BitmapData or PIXI.Texture.
-* @param {string|number} [frame] - If this Image is using part of a sprite sheet or texture atlas you can specify the exact frame to use by giving a string or numeric index.
-var Blitter = function (state, x, y, key, frame)
-{
-    var _texture = state.sys.textures.get(key);
-    var _frame = _texture.get(frame);
-
-    GameObject.call(this, state, x, y, _texture, _frame);
-
-    this.type = CONST.BLITTER;
-
-    this.children = new Children(this);
-
-    this.renderList = [];
-
-    this.dirty = false;
-};
-
-Blitter.prototype = Object.create(GameObject.prototype);
-Blitter.prototype.constructor = Blitter;
-
-Blitter.prototype.renderCanvas = require('./BlitterCanvasRenderer');
-Blitter.prototype.renderWebGL = require('./BlitterWebGLRenderer');
-*/
-
 
 module.exports = Blitter;
